@@ -31,9 +31,10 @@
         'lat': 20.680324,
         'lng': -103.392264,
         'onChange': function (location) {
-            console.log(location);
             $('#lat').val(location.lat());
             $('#lng').val(location.lng());
+
+            console.log(this.mapMarker('getMap'));
         }
     });
     </script>

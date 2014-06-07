@@ -97,14 +97,31 @@
 		'setLocation': function (location) {
 			this.data().marker.setPosition(location);
 			this.mapMarker('notifyNewLocation');
+
 			return this;
 		},
 		// - setLocation()
 		
+		/**
+		 * Notify that the marker has a new location.
+		 * @return {jQuery} jQuery object
+		 */
 		'notifyNewLocation': function () {
 			var location = this.data().marker.getPosition();
-			this.data().options.onChange(location);
+			this.data().options.onChange.call(this, location);
+
+			return this;
+		},
+		// - notifyNewLocation()
+		
+		/**
+		 * Returns the reference to the google.maps.Map object
+		 * @return {google.maps.Map}
+		 */
+		'getMap': function () {
+			return this.data().map;
 		}
+		// - getMap()
 	};
 
 	/**
@@ -112,9 +129,9 @@
 	 */
 	$.fn.mapMarker = function (method) {
 		if (m[method]) {
-			m[method].apply(this, Array.prototype.slice.call(arguments, 1));
+			return m[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
-			m.init.apply(this, arguments);
+			return m.init.apply(this, arguments);
 		} else {
 			$.error('Method ' + method + ' does not exists in jQuery.mapMarker');
 		}
