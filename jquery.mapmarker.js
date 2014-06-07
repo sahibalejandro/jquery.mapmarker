@@ -11,11 +11,14 @@
 	var defaultOptions = {
 		'lat': 0,
 		'lng': 0,
-		'latField': '',
-		'lngField': '',
-		'zoom': 12,
-		'mapType': google.maps.MapTypeId.ROADMAP,
-		'onChange': function (location) {}
+		'onChange': function (location) {},
+		'mapOptions': {
+			'mapTypeId': google.maps.MapTypeId.ROADMAP,
+			'zoom': 12
+		},
+		'markerOptions': {
+			'draggable': true
+		}
 	};
 
 	/**
@@ -40,38 +43,35 @@
 				'map': null,
 				'marker': null,
 				'geocoder': null,
-				'location': null,
-				'isSearching': false,
-				'options': options
+				'options': options,
+				
+				'isSearching': false
 			};
 
-			// Default location to place the marker
+			// Default location to center map and place the marker for the
+			// first time.
 			var defaultLocation = new google.maps.LatLng(options.lat, options.lng);
 
-			// Map options
-			var mapOptions = {
-				'center': defaultLocation,
-				'zoom': options.zoom,
-				'mapTypeId': options.mapType,
-
-				// 'disableDefaultUI': true
-			};
-
-			// Marker options
-			var markerOptions = {
-				'draggable': true
-			};
+			/* ----------------------------------------------------------------
+			 * Initialize objects
+			 */
 
 			// Initialize objets and store in $().data()
-			data.marker   = new google.maps.Marker(markerOptions);
-			data.map      = new google.maps.Map(this.get(0), mapOptions);
+			data.marker   = new google.maps.Marker(options.markerOptions);
+			data.map      = new google.maps.Map(this.get(0), options.mapOptions);
 			data.geocoder = new google.maps.Geocoder();
-
-			data.marker.setMap(data.map);
 			this.data(data);
 
-			// Place marker in default location
+			// Attach marker into map
+			data.marker.setMap(data.map);
+
+			// Center map and marker in default location
+			data.map.setCenter(defaultLocation);
 			this.mapMarker('setLocation', defaultLocation);
+
+			/* ----------------------------------------------------------------
+			 * Events
+			 */
 
 			// Place the marker in a new location when user click on the map.
 			google.maps.event.addListener(data.map, 'click', function (e)
@@ -90,7 +90,7 @@
 		// - init()
 		
 		/**
-		 * Place marker in a new locaton and update location fields.
+		 * Place marker in a new locaton and notify it.
 		 * @param  {google.maps.LatLng} location New location
 		 * @return {jQuery} jQuery object
 		 */
@@ -124,7 +124,7 @@
 		// - getMap()
 	};
 
-	/**
+	/* ------------------------------------------------------------------------
 	 * Method calling logic
 	 */
 	$.fn.mapMarker = function (method) {
