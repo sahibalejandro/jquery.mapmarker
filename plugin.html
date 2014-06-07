@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Map Marker</title>
+
+    <style type="text/css">
+    #canvas {
+        width: 640px;
+        height: 480px;
+    }
+    </style>
+
+</head>
+<body>
+
+    <div id="canvas"></div>
+    <form action="">
+        <label>Lat:</label>
+        <input type="text" id="lat">
+        <label>Lng:</label>
+        <input type="text" id="lng">
+    </form>
+
+    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyAR5Vfg5BlWlU2yG6J-Qv52C4QhfUFFBWg&amp;sensor=false&amp;language=en"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="jquery.mapmarker.js"></script>
+
+    <script>
+    $('#canvas').mapMarker({
+        'lat': 20.680324,
+        'lng': -103.392264,
+        'onChange': function (location) {
+            console.log(location);
+            $('#lat').val(location.lat());
+            $('#lng').val(location.lng());
+        }
+    });
+    </script>
+
+</body>
+</html>

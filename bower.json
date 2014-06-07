@@ -1,0 +1,24 @@
+{
+  "name": "MapMarker",
+  "version": "0.0.0",
+  "authors": [
+    "Sahib J. Leo <sahib.alejandro@gmail.com>"
+  ],
+  "description": "Map widget to get lat and long using Google Maps",
+  "main": "jquery.mapmarker.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "map",
+    "latitude",
+    "longitud",
+    "search",
+    "google"
+  ],
+  "license": "MIT",
+  "homepage": "http://sahib.io",
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}

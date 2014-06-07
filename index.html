@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>Map Locator Tool</title>
+  <meta name="description" content="Obtener facilmente la latitud y longitud de un lugar utilizando google maps.">
+  <style type="text/css">
+    body{
+      color: #444;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      margin: 20px auto;
+      width: 920px;
+    }
+    
+    #map_canvas{
+      border: 1px solid #444;
+      font-size: 10px;
+      margin: 20px 0;
+      width: 919px;
+      height: 500px;
+    }
+    
+    #footer{
+      color: #888;
+      margin: 30px 0;
+      text-align: center;
+    }
+  </style>
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33980263-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+</head>
+<body onload="initialize()">
+  <h2>Map Locator Tool</h2>
+  <form action="javascript:search_address();">
+    <label for="search">Search address:</label>
+    <input type="text" name="search" id="search" size="50">
+    <button type="submit" id="btn_search">Search!</button>
+    <p>
+      Click on the map to know the lat & long values.
+    </p>
+    <label for="latlng">Lat&Long:</label>
+    <input type="text" name="latlng" id="latlng" value="" size="50">
+  </form>
+  <div id="map_canvas"></div>
+  <div id="footer">Map Locator Tool - <a href="http://sahibalejandro.com/" target="_blank" title="Home page">Sahib Alejandro Jaramillo Leo</a> - 2012</div>
+<script type="text/javascript"
+  src="http://maps.googleapis.com/maps/api/js?key=AIzaSyADS1NxxAXKATi1jgRdvfndNZiFe5HCdPk&sensor=false&language=en">
+</script>
+<script type="text/javascript">
+var Map;
+var Marker;
+var InitialLatLong;
+var Geocoder;
+
+var txtLatLng;
+var btnSearch;
+var is_geocoding = false;
+
+function initialize()
+{
+  txtLatLng = document.getElementById('latlng');
+  btnSearch = document.getElementById('btn_search');
+
+  /*
+   * Create GMaps objects
+   */
+  Geocoder = new google.maps.Geocoder();
+  InitialLatLong = new google.maps.LatLng(20.680324,-103.392264);
+  Map = new google.maps.Map(document.getElementById('map_canvas'), {
+    'center': InitialLatLong,
+    'zoom': 12,
+    'mapTypeId': google.maps.MapTypeId.ROADMAP
+  });
+  Marker = new google.maps.Marker({'map': Map});
+  placeMarker(InitialLatLong);
+  
+  // Add dbclick event to the map
+  google.maps.event.addListener(Map, 'click', function (e)
+  {
+    placeMarker(e.latLng);
+  });
+}
+
+function placeMarker(location)
+{
+  Marker.setPosition(location);
+  txtLatLng.value = location.toUrlValue();
+}
+
+function search_address()
+{
+  if (!is_geocoding) {
+    
+    // Lock is_geocoding
+    is_geocoding = true;
+    btnSearch.disabled = true;
+    
+    Geocoder.geocode({
+      'address': document.getElementById('search').value
+    },
+    function (results, status)
+    {
+      // Unlock is_geocoding
+      is_geocoding = false;
+      btnSearch.disabled = false;
+      
+      if (status != google.maps.GeocoderStatus.OK) {
+        alert("Fail to search, reason: " + status);
+      } else {
+        placeMarker(results[0].geometry.location);
+        Map.setCenter(results[0].geometry.location);
+      }
+    });
+  }
+}
+</script>
+</body>
+</html>
