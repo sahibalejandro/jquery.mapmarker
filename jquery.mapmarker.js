@@ -11,6 +11,8 @@
 	var defaultOptions = {
 		'lat': 0,
 		'lng': 0,
+		'latField': null,
+		'lngField': null,
 		'onChange': function (location) {},
 		'mapOptions': {
 			'mapTypeId': google.maps.MapTypeId.ROADMAP,
@@ -48,9 +50,15 @@
 				'isSearching': false
 			};
 
-			// Default location to center map and place the marker for the
+			// Get default location from fields or options object.
+			var defaultLat = options.latField
+				? $(options.latField).val() : options.lat;
+			var defaultLng = options.lngField
+				? $(options.lngField).val() : options.lng;
+
+			// Create default location to center map and marker for the
 			// first time.
-			var defaultLocation = new google.maps.LatLng(options.lat, options.lng);
+			var defaultLocation = new google.maps.LatLng(defaultLat, defaultLng);
 
 			/* ----------------------------------------------------------------
 			 * Initialize objects
@@ -107,7 +115,18 @@
 		 * @return {jQuery} jQuery object
 		 */
 		'notifyNewLocation': function () {
+			// Get location from marker
 			var location = this.data().marker.getPosition();
+
+			// Update fields, if they are defined.
+			var latField = this.data().options.latField;
+			var lngField = this.data().options.lngField;
+			if (latField && lngField) {
+				$(latField).val(location.lat());
+				$(lngField).val(location.lng());
+			}
+
+			// Trigger onChange event.
 			this.data().options.onChange.call(this, location);
 
 			return this;

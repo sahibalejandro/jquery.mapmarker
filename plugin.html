@@ -17,9 +17,9 @@
     <div id="canvas"></div>
     <form action="">
         <label>Lat:</label>
-        <input type="text" id="lat">
+        <input type="text" id="lat" value="37.42200191695983" autocomplete="off">
         <label>Lng:</label>
-        <input type="text" id="lng">
+        <input type="text" id="lng" value="-122.08405315876001" autocomplete="off">
     </form>
 
     <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyAR5Vfg5BlWlU2yG6J-Qv52C4QhfUFFBWg&amp;sensor=false&amp;language=en"></script>
@@ -28,11 +28,10 @@
 
     <script>
     $('#canvas').mapMarker({
-        'lat': 20.680267538897866,
-        'lng': -103.39255501967813,
+        'latField': '#lat',
+        'lngField': '#lng',
         'onChange': function (location) {
-            $('#lat').val(location.lat());
-            $('#lng').val(location.lng());
+            console.log('onChange');
         }
     });
     </script>
