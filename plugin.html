@@ -9,6 +9,22 @@
         width: 640px;
         height: 480px;
     }
+    #results-view {
+        width: 40%;
+    }
+    .result {
+        background-color: #efefef;
+        border: 1px solid #444;
+        border-radius: 3px;
+        padding: 0.5em;
+        margin: 0.1em;
+        display: inline-block;
+        text-decoration: none;
+        color: #444;
+    }
+    .result:hover {
+        background-color: #fefefe;
+    }
     </style>
 
 </head>
@@ -16,24 +32,45 @@
 
     <div id="canvas"></div>
     <form action="">
-        <label>Lat:</label>
-        <input type="text" id="lat" value="37.42200191695983" autocomplete="off">
-        <label>Lng:</label>
-        <input type="text" id="lng" value="-122.08405315876001" autocomplete="off">
+        <div>
+            <label for="search">Search:</label>
+            <input type="text" name="search" id="search">
+            <button type="button" id="btn-search">search</button>
+        </div>
+        <div>
+            <label>Lat:</label>
+            <input type="text" id="lat" value="37.42200191695983" autocomplete="off">
+        </div>
+        <div>
+            <label>Lng:</label>
+            <input type="text" id="lng" value="-122.08405315876001" autocomplete="off">
+        </div>
+
+        <div id="results-view"></div>
+
     </form>
 
-    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyAR5Vfg5BlWlU2yG6J-Qv52C4QhfUFFBWg&amp;sensor=false&amp;language=en"></script>
+    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyADS1NxxAXKATi1jgRdvfndNZiFe5HCdPk&amp;sensor=false&amp;language=es"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="jquery.mapmarker.js"></script>
 
     <script>
     $('#canvas').mapMarker({
+        // Googleplex
+        'lat': '37.42200191695983',
+        'lng': '-122.08405315876001',
         'latField': '#lat',
         'lngField': '#lng',
-        'onChange': function (location) {
-            console.log('onChange');
-        }
+        'resultsView': '#results-view',
+        'resultTemplate': '<a href="#" class="result">:address</a>'
     });
+
+    $('#btn-search').on('click', function (e) {
+    
+        $('#canvas').mapMarker('search', $('#search').val());
+    
+    });
+
     </script>
 
 </body>
