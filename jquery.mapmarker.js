@@ -194,7 +194,22 @@
 		 * @return {jQuery}          jQuery object
 		 */
 		'disable': function (disable) {
-			console.log('disable map:', disable);
+
+            if (disable) {
+                var markerDisable = $('<div class="mapmarker-disable">').css({
+                    'position': 'absolute',
+                    'left': 0,
+                    'top': 0,
+                    'width': '100%',
+                    'height': '100%',
+                    'background-color': 'rgba(255,255,255,0.5)'
+                });
+                this.append(markerDisable);
+            } else {
+                this.find('.mapmarker-disable').remove();
+            }
+
+			return this;
 		},
 		// - disable()
 		
