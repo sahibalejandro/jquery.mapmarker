@@ -9,6 +9,9 @@
   "moduleType": [
     "globals"
   ],
+  "ignore": [
+    "index.html"
+  ],
   "keywords": [
     "map",
     "latitude",
