@@ -31,7 +31,7 @@
 <body>
 
     <div id="canvas"></div>
-    <form action="">
+    <form action="" autocomplete="off">
         <div>
             <label for="search">Search:</label>
             <input type="text" name="search" id="search">
@@ -39,11 +39,11 @@
         </div>
         <div>
             <label>Lat:</label>
-            <input type="text" id="lat" value="37.42200191695983" autocomplete="off">
+            <input type="text" id="lat" value="" autocomplete="off">
         </div>
         <div>
             <label>Lng:</label>
-            <input type="text" id="lng" value="-122.08405315876001" autocomplete="off">
+            <input type="text" id="lng" value="" autocomplete="off">
         </div>
 
         <div id="results-view"></div>
@@ -57,8 +57,8 @@
     <script>
     $('#canvas').mapMarker({
         // Googleplex
-        'lat': '37.42200191695983',
-        'lng': '-122.08405315876001',
+        'lat': '37.522001',
+        'lng': '-122.184053',
         'latField': '#lat',
         'lngField': '#lng',
         'resultsView': '#results-view',

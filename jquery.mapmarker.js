@@ -75,10 +75,8 @@
 			};
 
 			// Get default location from fields or options object.
-			var defaultLat = options.latField
-				? $(options.latField).val() : options.lat;
-			var defaultLng = options.lngField
-				? $(options.lngField).val() : options.lng;
+			var defaultLat = get_coordinate_value(options.latField, options.lat);
+			var defaultLng = get_coordinate_value(options.lngField, options.lng);
 
 			// Create default location to center map and marker for the
 			// first time.
@@ -226,8 +224,11 @@
 
 	/**
 	 * Print geocoder results in resultsView.
+	 * @param {GeocoderResult} results
+	 * @param {GeocoderStatus} status
 	 */
-	function print_results(results, status) {
+	function print_results(results, status)
+	{
 		var parent   = this;
 		var template = this.data('mapMarker').options.resultTemplate;
 		var view     = $(this.data('mapMarker').options.resultsView);
@@ -257,6 +258,21 @@
 				view.text(status);
 		}
 
+	}
+
+	/**
+	 * Retrieve a coordinate value from a input field or a default value.
+	 * @param {String} fieldSelector
+	 * @param {String} defaultValue
+	 * @returns {String}
+	 */
+	function get_coordinate_value(fieldSelector, defaultValue)
+	{
+		if (!fieldSelector) return defaultValue;
+
+		var coordinate = $(fieldSelector).val();
+
+		return coordinate ? coordinate : defaultValue;
 	}
 
 	/* ------------------------------------------------------------------------
