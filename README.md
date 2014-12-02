@@ -94,10 +94,6 @@ This function is called when the search finish and after the results are printed
         // Do something with other status codes...
     }
 
-setLocationZoom {Number}
------------------
-Default zoom to apply when method `setLocation` is called.
-
 mapOptions {Object}
 -----------------
 Options to pass directly to `goole.map.Map(...)`, see [Google Maps API Reference](https://developers.google.com/maps/documentation/javascript/reference?hl=es#MapOptions) for a complete list of options.
@@ -119,7 +115,6 @@ Default:
         draggable: true
     }
 
-
 resultsView {String}
 --------------------
 CSS selector of the view (div) where to show the search results.
@@ -132,18 +127,21 @@ Template for each result, the string `:address` will be replaced with the result
 
 Default: `'<a href="#">:address</a>'`
 
+resultZoom {Number}
+-----------------
+Default zoom to apply when a search result is clicked.
+
 Methods
 =======
 
 setLocation()
 -------------
-Place the marker into a new location in the map and zoom/center the map in the place.  
+Place the marker into a new location in the map.  
 This method triggers `options.onChange()` event.
 
 *Arguments:*
 
 1. location {google.maps.LatLng}
-2. zoom {Number} - Defaults to `options.setLocationZoom`
 
 search()
 -------------

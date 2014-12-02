@@ -17,7 +17,7 @@
 		onChange: function (location) {},
 		onSearchStart: function () {},
 		onSearchEnd: function (status) {},
-        setLocationZoom: 15,
+        resultZoom: 15,
 		/**
 		 * Map options.
 		 * @see https://developers.google.com/maps/documentation/javascript/reference?hl=es#MapOptions
@@ -95,9 +95,9 @@
 			// Attach marker into map
 			data.marker.setMap(data.map);
 
-			// Center map and marker in default location and initial zoom.
+			// Center map and marker in default location.
 			data.map.setCenter(defaultLocation);
-			this.mapMarker('setLocation', defaultLocation, options.mapOptions.zoom);
+			this.mapMarker('setLocation', defaultLocation);
 
 			/* ----------------------------------------------------------------
 			 * Events
@@ -125,11 +125,10 @@
          * @param {Number} zoom Zoom
 		 * @return {jQuery} jQuery object
 		 */
-		setLocation: function (location, zoom) {
+		setLocation: function (location) {
 			var data = this.data('mapMarker');
 
             data.marker.setPosition(location);
-            data.map.setZoom(zoom || data.options.setLocationZoom);
 
 			this.mapMarker('notifyNewLocation');
 
@@ -252,7 +251,11 @@
                 jqResult.on('click', function (e) {
                     e.preventDefault();
                     var location = $(this).data().geocoderResult.geometry.location;
-                    parent.data('mapMarker').map.panTo(location);
+                    var data = parent.data('mapMarker');
+
+                    data.map.panTo(location);
+                    data.map.setZoom(data.options.resultZoom);
+
                     parent.mapMarker('setLocation', location);
                 });
 
