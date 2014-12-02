@@ -17,7 +17,7 @@
 		onChange: function (location) {},
 		onSearchStart: function () {},
 		onSearchEnd: function (status) {},
-        setLocationZoom: 12,
+        setLocationZoom: 15,
 		/**
 		 * Map options.
 		 * @see https://developers.google.com/maps/documentation/javascript/reference?hl=es#MapOptions
@@ -25,7 +25,7 @@
 		 */
 		mapOptions: {
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			zoom: 12
+			zoom: 13
 		},
 		/**
 		 * Marker options.
@@ -95,9 +95,9 @@
 			// Attach marker into map
 			data.marker.setMap(data.map);
 
-			// Center map and marker in default location
+			// Center map and marker in default location and initial zoom.
 			data.map.setCenter(defaultLocation);
-			this.mapMarker('setLocation', defaultLocation);
+			this.mapMarker('setLocation', defaultLocation, options.mapOptions.zoom);
 
 			/* ----------------------------------------------------------------
 			 * Events

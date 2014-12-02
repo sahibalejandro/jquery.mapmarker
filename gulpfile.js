@@ -6,7 +6,7 @@ var rename = require('gulp-rename');
 var pkg = require('./bower.json');
 var banner = "/* <%= name %> v<%= version %> | Sahib J. Leo | License: MIT | http://sahib.io */\n";
 
-gulp.task('dist', function ()
+gulp.task('default', function ()
 {
     gulp.src('jquery.mapmarker.js')
         .pipe(uglify())
