@@ -1,6 +1,6 @@
 
 /**
- * jQuery Map Marker v1.1.0
+ * jQuery Map Marker v1.1.2
  * @author Sahib J. Leo (sahib.alejandro@gmail.com)
  * @license MIT
  */
