@@ -1,6 +1,6 @@
 
 /**
- * jQuery Map Marker v1.0.0
+ * jQuery Map Marker v1.1.0
  * @author Sahib J. Leo (sahib.alejandro@gmail.com)
  * @license MIT
  */
@@ -10,41 +10,41 @@
 	 * @type {Object}
 	 */
 	var defaultOptions = {
-		'lat': 0,
-		'lng': 0,
-		'latField': null,
-		'lngField': null,
-		'onChange': function (location) {},
-		'onSearchStart': function () {console.log('onSearchStart');},
-		'onSearchEnd': function (status) {console.log('onSearchEnd');},
-		'noResultsMsg': 'No results.',
+		lat: 0,
+		lng: 0,
+		latField: null,
+		lngField: null,
+		onChange: function (location) {},
+		onSearchStart: function () {},
+		onSearchEnd: function (status) {},
+        setLocationZoom: 12,
 		/**
 		 * Map options.
 		 * @see https://developers.google.com/maps/documentation/javascript/reference?hl=es#MapOptions
 		 * @type {Object}
 		 */
-		'mapOptions': {
-			'mapTypeId': google.maps.MapTypeId.ROADMAP,
-			'zoom': 12
+		mapOptions: {
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			zoom: 12
 		},
 		/**
 		 * Marker options.
 		 * @see https://developers.google.com/maps/documentation/javascript/reference?hl=es#MarkerOptions
 		 * @type {Object}
 		 */
-		'markerOptions': {
-			'draggable': true
+		markerOptions: {
+			draggable: true
 		},
 		/**
 		 * Selector of element where the search results are displayed.
 		 * @type {String}
 		 */
-		'resultsView': null,
+		resultsView: null,
 		/**
 		 * HTML template for each search result.
 		 * @type {String}
 		 */
-		'resultTemplate': '<a href="#">:address</a>'
+		resultTemplate: '<a href="#">:address</a>'
 	};
 
 	/**
@@ -57,7 +57,7 @@
 		 * @param  {Object} opts Plugin options
 		 * @return {jQuery}      jQuery object
 		 */
-		'init': function (opts) {
+		init: function (opts) {
 			// Save a reference to "this" to use it from within the callbacks
 			var parent = this;
 
@@ -66,12 +66,12 @@
 
 			// Element's data, to use with $().data('mapMarker');
 			var data = {
-				'map': null,
-				'marker': null,
-				'geocoder': null,
-				'options': options,
+				map: null,
+				marker: null,
+				geocoder: null,
+				options: options,
 				
-				'isSearching': false
+				isSearching: false
 			};
 
 			// Get default location from fields or options object.
@@ -121,11 +121,16 @@
 		
 		/**
 		 * Place marker in a new locaton and notify it.
-		 * @param  {google.maps.LatLng} location New location
+		 * @param {google.maps.LatLng} location New location
+         * @param {Number} zoom Zoom
 		 * @return {jQuery} jQuery object
 		 */
-		'setLocation': function (location) {
-			this.data('mapMarker').marker.setPosition(location);
+		setLocation: function (location, zoom) {
+			var data = this.data('mapMarker');
+
+            data.marker.setPosition(location);
+            data.map.setZoom(zoom || data.options.setLocationZoom);
+
 			this.mapMarker('notifyNewLocation');
 
 			return this;
@@ -136,7 +141,7 @@
 		 * Notify that the marker has a new location.
 		 * @return {jQuery} jQuery object
 		 */
-		'notifyNewLocation': function () {
+		notifyNewLocation: function () {
 			// Get location from marker
 			var location = this.data('mapMarker').marker.getPosition();
 
@@ -160,7 +165,7 @@
 		 * @param  {String} address Address to search
 		 * @return {jQuery}         jQuery object
 		 */
-		'search': function (address) {
+		search: function (address) {
 			// Keep reference for access from within callbacks.
 			var parent = this;
 
@@ -191,16 +196,16 @@
 		 * @param  {boolean} disable Disable or enable
 		 * @return {jQuery}          jQuery object
 		 */
-		'disable': function (disable) {
+		disable: function (disable) {
 
             if (disable) {
                 var markerDisable = $('<div class="mapmarker-disable">').css({
-                    'position': 'absolute',
-                    'left': 0,
-                    'top': 0,
-                    'width': '100%',
-                    'height': '100%',
-                    'background-color': 'rgba(255,255,255,0.5)'
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(255,255,255,0.5)'
                 });
                 this.append(markerDisable);
             } else {
@@ -215,7 +220,7 @@
 		 * Returns the reference to the google.maps.Map object
 		 * @return {google.maps.Map}
 		 */
-		'getMap': function () {
+		getMap: function () {
 			return this.data('mapMarker').map;
 		}
 		// - getMap()
@@ -236,26 +241,23 @@
 		// Clear old results
 		view.empty();
 
-		switch (status) {
-			case google.maps.GeocoderStatus.OK:
-				// Iterate over results to print each one.
-				$.each(results, function (i, result) {
-					var resultHTML = template.replace(':address', result.formatted_address);
-					var jqResult = $(resultHTML);
+		if (status == google.maps.GeocoderStatus.OK)
+        {
+            // Iterate over results to print each one.
+            $.each(results, function (i, result) {
+                var resultHTML = template.replace(':address', result.formatted_address);
+                var jqResult = $(resultHTML);
 
-					jqResult.data('geocoderResult', result);
-					jqResult.on('click', function (e) {
-						e.preventDefault();
-						var location = $(this).data().geocoderResult.geometry.location;
-						parent.data('mapMarker').map.panTo(location);
-						parent.mapMarker('setLocation', location);
-					});
+                jqResult.data('geocoderResult', result);
+                jqResult.on('click', function (e) {
+                    e.preventDefault();
+                    var location = $(this).data().geocoderResult.geometry.location;
+                    parent.data('mapMarker').map.panTo(location);
+                    parent.mapMarker('setLocation', location);
+                });
 
-					view.append(jqResult);
-				});
-				break;
-			default:
-				view.text(status);
+                view.append(jqResult);
+            });
 		}
 
 	}
